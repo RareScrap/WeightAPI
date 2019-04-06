@@ -22,7 +22,7 @@ public interface IWeightProvider {
      * этом инвентаре не имее веса?), в котором находится стак... Именно поэтому этот метод имеет так много
      * аргументов - ради гибкости использования.
      */
-    int getWeight(ItemStack itemStack, IInventory inventory, Entity owner);
+    double getWeight(ItemStack itemStack, IInventory inventory, Entity owner);
 
 
 }
