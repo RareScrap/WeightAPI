@@ -28,8 +28,7 @@ public interface IWeightTracker {
      */
     boolean isOverloaded();
 
-    // TODO: Нужно ли?
-    Entity getOwner();
+    Entity getInventoryOwner(); // TODO: Нужно ли?
 
     // TODO: Нужно ли?
 //    void onCurrentWeightChanged();
