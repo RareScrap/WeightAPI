@@ -20,7 +20,7 @@ public interface IWeightTracker {
     /**
      * @return Текущий вес инвентаря
      */
-    int getCurrentWeight();
+    double getCurrentWeight();
 
     /**
      * @return True, если инвентарь перегружен (обычно, когда вес инвентаря
