@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "weightapi",
+  "name": "WeightAPI",
+  "description": "API for adding weight system for items. This api allows modders to create their own weight tracking systems, determine the maximum tolerable weight, and respond to weight changes in any inventory.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["RareScrap"],
+  "credits": "Special thanks the Forge and FML guys.",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
