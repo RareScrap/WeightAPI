@@ -1,4 +1,4 @@
-package ru.rarescrap.event;
+package ru.rarescrap.weightapi.event;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;

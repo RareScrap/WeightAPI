@@ -1,4 +1,4 @@
-package ru.rarescrap;
+package ru.rarescrap.weightapi;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
