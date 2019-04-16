@@ -4,12 +4,12 @@ public class WeightRegistry {
 
     private static IWeightProvider weightProvider;
 
-    // Трекеры нужно регистрировать по большому счету только для того, чтобы иметь возможность получить их из других мест
-    public static void register(IWeightTracker tracker) {
-        trackers.put(tracker.getInventory(), tracker);
-        // TODO: Event?
-    }
-
+    /**
+     * Регистрирует {@link IWeightProvider}, к которому будут обращаться все инвентари игры
+     * (в том числе и из других модов) для вычисления веса, свободного места и т.д.
+     * Если {@link IWeightProvider}, уже установлен, то повторная регистрация вызовет краш.
+     * @param provider
+     */
     public static void registerWeightProvider(IWeightProvider provider) {
         if (weightProvider == null) weightProvider = provider;
         /* Не вижу смысла регистрировать новый провайдер если в системе уже есть зареганый.
@@ -24,6 +24,10 @@ public class WeightRegistry {
         weightProvider = null;
     }
 
+    /**
+     * Возвращает текущий объект, отвечающий за вычисления веса, свободного места и т.д.
+     * @return текущий {@link IWeightProvider}
+     */
     public static IWeightProvider getWeightProvider() {
         return weightProvider;
     }
