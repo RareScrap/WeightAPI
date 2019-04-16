@@ -9,7 +9,7 @@
   "updateUrl": "",
   "authorList": ["RareScrap"],
   "credits": "Special thanks the Forge and FML guys.",
-  "logoFile": "",
+  "logoFile": "assets/weightapi/logo.png",
   "screenshots": [],
   "dependencies": []
 }
