@@ -5,7 +5,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 /**
- * Интерфейс для объктов, способных расчитывать вес предметов
+ * Интерфейс для объктов, способных расчитывать вес предметов и инвентарей
  */
 public interface IWeightProvider {
 
@@ -24,5 +24,35 @@ public interface IWeightProvider {
      */
     double getWeight(ItemStack itemStack, IInventory inventory, Entity owner);
 
+    /**
+     * Вычисляет вес инвентаря
+     * @param inventory Инвенарь, вес которого нужно вычислить
+     * @param owner Владелец инвентаря
+     * @return Общий вес предметов в инвентаре
+     */
+    double getWeight(IInventory inventory, Entity owner);
 
+    /**
+     * Определяет, перегружен ли инвентарь.
+     * @param inventory Инвентарь, перегруз которого нужно выявить.
+     * @param owner Владелец инвентаря
+     * @return True, если инвентарь перегружен. Иначе - false.
+     */
+    boolean isOverloaded(IInventory inventory, Entity owner);
+
+    /**
+     * Вычисляет свободное место инвентаря
+     * @param inventory Инвенарь, для которого нужно вычислить свободное место
+     * @param owner Владелец инвентаря
+     * @return Оставшееся место в инвентаре, при пересечении которого инвентарь будет перегружен
+     */
+    double getFreeSpace(IInventory inventory, Entity owner);
+
+    /**
+     * Вычисляет максимальную вместимость инвентаря
+     * @param inventory Инвенарь, вместимость которого нужно вычислить
+     * @param owner Владелец инвентаря
+     * @return Максимальный вместимый вес инвентаря
+     */
+    double getMaxWeight(IInventory inventory, Entity owner);
 }
