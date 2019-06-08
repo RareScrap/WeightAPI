@@ -1,5 +1,5 @@
 commands.weightprovider.usage.set=/setweightprovider <НазваниеСистемыВеса> [информироваватьИгроков?]
 commands.weightprovider.failure.get.notFound=Доступные системы веса не найдены
-commands.weightprovider.failure.set.notFound=Система веса "%1$s" не найдена
+commands.weightprovider.failure.set.notFound=Система веса "%s" не найдена
 commands.weightprovider.success.set=Система веса была обновлена
-commands.weightprovider.success.get=Доступные системы веса: $s
+commands.weightprovider.success.get=Доступные системы веса: %s

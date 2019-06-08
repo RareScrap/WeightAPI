@@ -27,7 +27,7 @@ public class GetWeightProviders extends CommandBase {
             for (String providesName : WeightRegistry.getProvidersNames()) {
                 buffer.append(providesName).append(", ");
             }
-            buffer.delete(buffer.capacity()-2, buffer.capacity());
+            buffer.delete(buffer.length()-2, buffer.length()); // Удаляем последний разделитель
 
             // TODO: или commandSender.addChatMessage()?
             func_152373_a(commandSender, this, "commands.weightprovider.success.get", buffer.toString());

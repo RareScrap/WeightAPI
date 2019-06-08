@@ -28,7 +28,7 @@ public class SetWeightProvider extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender commandSender, String[] args) {
-        if (args.length != 1) throw new WrongUsageException(this.getCommandUsage(commandSender));
+        if (args.length > 2) throw new WrongUsageException(this.getCommandUsage(commandSender));
 
         if (WeightRegistry.getWeightProvider(args[0]) != null) {
             WeightRegistry.activateWeightProvider(args[0]);
