@@ -33,7 +33,7 @@ public class SetWeightProvider extends CommandBase {
         if (WeightRegistry.getWeightProvider(args[0]) != null) {
             WeightRegistry.activateWeightProvider(args[0], commandSender.getEntityWorld());
         } else {
-            throw new CommandException("commands.weightprovider.failure.set.notFound", args[0]);
+            throw new CommandException("commands.weightprovider.failure.set", args[0]);
         }
 
         boolean informPlayers = args.length == 2 ? Boolean.parseBoolean(args[1]) : false;

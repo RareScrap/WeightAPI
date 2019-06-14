@@ -1,8 +1,11 @@
 commands.weightprovider.usage.set=/setweightprovider <WeightProviderName> [informPlayers?]
-commands.weightprovider.usage.get=/getweightproviders
-commands.weightprovider.failure.get.notFound=No weight providers found
-commands.weightprovider.failure.set.notFound=Can't find "%s" weight provider
+commands.weightprovider.usage.getAll=/getweightproviders
+commands.weightprovider.usage.getActive=/getactiveweightprovider
+commands.weightprovider.failure.getAll=No weight providers found
+commands.weightprovider.failure.getActive=Weight provider not set
+commands.weightprovider.failure.set=Can't find "%s" weight provider
 commands.weightprovider.success.set=Weight provider has been updated
-commands.weightprovider.success.get=Available weight providers: %s
+commands.weightprovider.success.getAll=Available weight providers: %s
+commands.weightprovider.success.getActive=Active weight provider: %s
 
 log.weightprovider.restore.warning=Cant restore previous weight system "%s". Currently registered systems: %s.
