@@ -31,7 +31,7 @@ public class SetWeightProvider extends CommandBase {
         if (args.length > 2) throw new WrongUsageException(this.getCommandUsage(commandSender));
 
         if (WeightRegistry.getWeightProvider(args[0]) != null) {
-            WeightRegistry.activateWeightProvider(args[0]);
+            WeightRegistry.activateWeightProvider(args[0], commandSender.getEntityWorld());
         } else {
             throw new CommandException("commands.weightprovider.failure.set.notFound", args[0]);
         }

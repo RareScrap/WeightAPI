@@ -37,8 +37,8 @@ public class WorldData extends WorldSavedData { // reflection needed modifier
         return (WorldData) storage.loadData(WorldData.class, MODID);
     }
 
-    void restoreLastWeightProvider() {
-        if (lastWeightProvider != null && !WeightRegistry.activateWeightProvider(lastWeightProvider)) {
+    void restoreLastWeightProvider(World world) {
+        if (lastWeightProvider != null && !WeightRegistry.activateWeightProvider(lastWeightProvider, world)) {
             String logMsg = StatCollector.translateToLocalFormatted("log.weightprovider.restore.warning",
                     lastWeightProvider, Arrays.asList(WeightRegistry.getProvidersNames()));
             LOGGER.warn(logMsg);

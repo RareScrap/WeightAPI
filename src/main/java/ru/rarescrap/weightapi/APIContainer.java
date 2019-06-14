@@ -30,7 +30,7 @@ public class APIContainer  {
 
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) { //TODO: FMLServerStartedEvent?
-        if (!event.world.isRemote) WorldData.get(event.world).restoreLastWeightProvider(); // TODO: Срабатывает для каждого димешна, что намекает на использования своей системы веса в каждой димешне. Текущее поведение хоть и работает норм, но не является верным. Возможно что использовать WorldSavedData было неудачным решением, т.к. сам этот механизм сохранет инфу в каждом из миров, коих много
+        if (!event.world.isRemote) WorldData.get(event.world).restoreLastWeightProvider(event.world); // TODO: Срабатывает для каждого димешна, что намекает на использования своей системы веса в каждой димешне. Текущее поведение хоть и работает норм, но не является верным. Возможно что использовать WorldSavedData было неудачным решением, т.к. сам этот механизм сохранет инфу в каждом из миров, коих много
     }
 
     @SubscribeEvent
