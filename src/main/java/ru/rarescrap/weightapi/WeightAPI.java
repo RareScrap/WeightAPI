@@ -20,7 +20,7 @@ import ru.rarescrap.weightapi.command.SetWeightProvider;
 @Mod(modid = WeightAPI.MODID, version = WeightAPI.VERSION)
 public class WeightAPI {
     public static final String MODID = "weightapi";
-    public static final String VERSION = "0.2.0";
+    public static final String VERSION = "0.3.0";
 
     static final Logger LOGGER = LogManager.getLogger("WeightAPI");
 
