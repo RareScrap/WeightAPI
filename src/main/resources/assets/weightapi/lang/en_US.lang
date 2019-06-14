@@ -1,5 +1,5 @@
 commands.weightprovider.usage.set=/setweightprovider <WeightProviderName> [informPlayers?]
-commands.weightprovider.usage.get=/getweightprovider
+commands.weightprovider.usage.get=/getweightproviders
 commands.weightprovider.failure.get.notFound=No weight providers found
 commands.weightprovider.failure.set.notFound=Can't find "%s" weight provider
 commands.weightprovider.success.set=Weight provider has been updated
