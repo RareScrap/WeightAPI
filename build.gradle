@@ -19,7 +19,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "0.2.0"
+version = "0.3.0"
 group= "ru.rarescrap.weightapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "weightapi"
 def publicationVersion = version+'_1.7.10'
@@ -65,6 +65,12 @@ processResources
     }
 }
 
+// Собираем бинарник мода без обфускации. Рабочий вариант, в отличие от оф. доков из ForgeGradle
+task deobfJar(type: Jar) {
+    classifier "dev"
+    from sourceSets.main.output
+}
+
 // Формирует jar'ник с доками
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
@@ -87,7 +93,7 @@ publishing {
             groupId group
             artifactId archivesBaseName
             version publicationVersion
-            artifact jar
+            artifact deobfJar
             artifact sourcesJar
             artifact javadocJar
         }

@@ -1,6 +1,7 @@
 package ru.rarescrap.weightapi;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -55,4 +56,9 @@ public interface IWeightProvider {
      * @return Максимальный вместимый вес инвентаря
      */
     double getMaxWeight(IInventory inventory, Entity owner);
+
+    /**
+     * Синхронизирует данную систему веса с клиентом игрока.
+     */
+    void sync(EntityPlayerMP player);
 }
