@@ -8,8 +8,8 @@ import net.minecraft.world.storage.MapStorage;
 
 import java.util.Arrays;
 
-import static ru.rarescrap.weightapi.APIContainer.LOGGER;
-import static ru.rarescrap.weightapi.APIContainer.MODID;
+import static ru.rarescrap.weightapi.WeightAPI.LOGGER;
+import static ru.rarescrap.weightapi.WeightAPI.MODID;
 
 /**
  * Постоянное хранилище данных, необходимых для работы WeightAPI.

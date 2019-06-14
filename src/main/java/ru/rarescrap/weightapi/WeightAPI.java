@@ -17,8 +17,8 @@ import ru.rarescrap.weightapi.command.GetActiveWeightProvider;
 import ru.rarescrap.weightapi.command.GetWeightProviders;
 import ru.rarescrap.weightapi.command.SetWeightProvider;
 
-@Mod(modid = APIContainer.MODID, version = APIContainer.VERSION)
-public class APIContainer  {
+@Mod(modid = WeightAPI.MODID, version = WeightAPI.VERSION)
+public class WeightAPI {
     public static final String MODID = "weightapi";
     public static final String VERSION = "0.2.0";
 
@@ -39,7 +39,7 @@ public class APIContainer  {
     }
 
     @Mod.EventHandler
-    public void onStop(FMLServerStoppedEvent event) {
+    public void onServerStopped(FMLServerStoppedEvent event) {
         // т.к. при завершении мира в сингле провайдер все еще
         // сохраняется и вызовет краш при следующем заходе в игру
         WeightRegistry.clearProvider();
