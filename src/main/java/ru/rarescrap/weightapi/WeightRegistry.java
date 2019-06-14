@@ -1,10 +1,15 @@
 package ru.rarescrap.weightapi;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import ru.rarescrap.weightapi.event.WeightProviderChangedEvent;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,8 +42,21 @@ public class WeightRegistry {
 
         MinecraftForge.EVENT_BUS.post(new WeightProviderChangedEvent.Pre(activeWeightProvider, newProvider, world));
         activeWeightProvider = newProvider;
+        if (!world.isRemote && shouldSyncProvider()) syncWithAllPlayers();
         MinecraftForge.EVENT_BUS.post(new WeightProviderChangedEvent.Post(activeWeightProvider, newProvider, world));
         return true;
+    }
+
+    static boolean shouldSyncProvider() {
+        return MinecraftServer.getServer().isDedicatedServer() || ((IntegratedServer) MinecraftServer.getServer()).getPublic();
+    }
+
+    private static void syncWithAllPlayers() {
+        for (WorldServer worldServer : MinecraftServer.getServer().worldServers) {
+            for (EntityPlayerMP player : (List<EntityPlayerMP>) worldServer.playerEntities) {
+                activeWeightProvider.sync(player);
+            }
+        }
     }
 
     /**
