@@ -3,6 +3,7 @@ package ru.rarescrap.weightapi;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -12,6 +13,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.rarescrap.weightapi.command.GetActiveWeightProvider;
+import ru.rarescrap.weightapi.command.GetWeightProviders;
+import ru.rarescrap.weightapi.command.SetWeightProvider;
 
 @Mod(modid = APIContainer.MODID, version = APIContainer.VERSION)
 public class APIContainer  {
@@ -24,6 +28,14 @@ public class APIContainer  {
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
         FMLCommonHandler.instance().bus().register(this);
+    }
+
+    @Mod.EventHandler
+    public void onServerStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new GetActiveWeightProvider());
+        event.registerServerCommand(new GetWeightProviders());
+        event.registerServerCommand(new SetWeightProvider());
+        // TODO: Команда отключения активного провайдера
     }
 
     @Mod.EventHandler
