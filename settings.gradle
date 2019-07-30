@@ -1,0 +1,7 @@
+//rootProject.name = "ProjectName" // имя главного проекта
+
+/* название наших модулей */
+//include ':examples:case1' // Ну так по крайней мере субпроджект в класспач добавлялся
+
+include 'case1'
+project(":case1").projectDir = file("examples/case1")

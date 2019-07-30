@@ -27,9 +27,14 @@ def publicationVersion = version+'_1.7.10'
 minecraft {
     version = "1.7.10-10.13.4.1614-1.7.10"
     runDir = "eclipse"
+
+    File f = project(":case1").projectDir;
+    at(file("$f/src/main/resources/META-INF/weightapi_example1_at.cfg")) // TODO: Добавлять циклом
 }
 
 dependencies {
+    runtimeClasspath project(':case1')
+
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
