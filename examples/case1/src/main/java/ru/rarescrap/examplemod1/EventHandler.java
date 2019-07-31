@@ -7,10 +7,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -22,9 +24,12 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import org.lwjgl.opengl.GL11;
 import ru.rarescrap.weightapi.WeightRegistry;
 import ru.rarescrap.weightapi.event.WeightProviderChangedEvent;
 
+import static net.minecraftforge.client.GuiIngameForge.right_height;
+import static ru.rarescrap.examplemod1.ExampleMod1.WEIGHT;
 import static ru.rarescrap.examplemod1.Utils.calculateAllowingStackSize;
 import static ru.rarescrap.examplemod1.Utils.drawCenteredStringWithoutShadow;
 
@@ -51,7 +56,7 @@ public class EventHandler {
     public void onOverload(TickEvent.ClientTickEvent event) {
         if (Minecraft.getMinecraft().thePlayer != null // Игрок МОЖЕТ быть не инициализирован во время клиентского тика
                 && Minecraft.getMinecraft().thePlayer.movementInput != freezeMovementInput // TODO: instanceof?
-                && WeightRegistry.getActiveWeightProvider() instanceof WeightProvider) { // Поддержка маштабируемость провайдера за счет наслеников
+                && WeightRegistry.getActiveWeightProvider() instanceof WeightProvider) { // Поддержка маштабируемости провайдера за счет наслеников
             Minecraft.getMinecraft().thePlayer.movementInput = freezeMovementInput;
         }
     }
@@ -145,48 +150,42 @@ public class EventHandler {
 
     protected void renderWeight(int width, int height, RenderGameOverlayEvent eventParent)
     {
-        //if (pre(DebugMod.WEIGHT, eventParent)) return;
-        // my code start
+        if (pre(WEIGHT, eventParent)) return;
         Minecraft mc = Minecraft.getMinecraft();
-        //bind(DebugMod.WEIGHT_ICONS, mc);
-        // my code end
+        mc.mcProfiler.startSection("weight");
 
-        //mc.mcProfiler.startSection("weight");
+        GL11.glEnable(GL11.GL_BLEND);
+        int left = width / 2 + 91 - 9;
+        int top = height - right_height;
+        right_height += 10;
 
-        //GL11.glEnable(GL11.GL_BLEND);
-        int left = 100;//width / 2 - 91;
-        int top = 100;//height - left_height;
-
-        //int level = ForgeHooks.getTotalArmorValue(mc.thePlayer);
+        int level = (int) (WeightRegistry.getActiveWeightProvider().getWeight(Minecraft.getMinecraft().thePlayer.inventory, Minecraft.getMinecraft().thePlayer) / 1);
         bind(WEIGHT_ICONS, mc);
-        //bind(icons, mc);
 
-        //mc.ingameGUI.drawTexturedModalRect(left, top, 34, 9, 9, 9);
-        mc.ingameGUI.drawTexturedModalRect(left, top, 0, 0, 9, 9);
-//        for (int i = 1; level > 0 && i < 20; i += 2)
-//        {
-//            if (i < level)
-//            {
-//                mc.ingameGUI.drawTexturedModalRect(left, top, 0/*34*/, 0, 9, 9);
-//            }
-//            else if (i == level)
-//            {
-//                mc.ingameGUI.drawTexturedModalRect(left, top, 9/*25*/, 0, 9, 9);
-//            }
-//            else if (i > level)
-//            {
-//                mc.ingameGUI.drawTexturedModalRect(left, top, 18/*16*/, 0, 9, 9);
-//            }
-//            left += 20;//8;
-//        }
-        //left_height += 10;
+        for (int i = 1; level > 0 && i < 20; i += 2)
+        {
+            if (WeightRegistry.getActiveWeightProvider().isOverloaded(Minecraft.getMinecraft().thePlayer.inventory, Minecraft.getMinecraft().thePlayer))  {
+                // Рендерим без скейла
+                Gui.func_146110_a(left, top, 27, 0, 9, 9, 36, 9);
+            } else if (i < level) {
+                Gui.func_146110_a(left, top, 18, 0, 9, 9, 36, 9);
+            }
+            else if (i == level) {
+                Gui.func_146110_a(left, top, 9, 0, 9, 9, 36, 9);
+            }
+            else if (i > level)
+            {
+                Gui.func_146110_a(left, top, 0, 0, 9, 9, 36, 9);
+            }
+            left -= 8;
+        }
 
-        //GL11.glDisable(GL11.GL_BLEND);
-        //mc.mcProfiler.endSection();
-        //post(DebugMod.WEIGHT, eventParent);
+        GL11.glDisable(GL11.GL_BLEND);
+        mc.mcProfiler.endSection();
+        post(WEIGHT, eventParent);
     }
 
-    //Helper macros
+    //Helper macros from GuiIngameForge
     private boolean pre(RenderGameOverlayEvent.ElementType type, RenderGameOverlayEvent eventParent)
     {
         return MinecraftForge.EVENT_BUS.post(new RenderGameOverlayEvent.Pre(eventParent, type));
