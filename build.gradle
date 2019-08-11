@@ -33,7 +33,8 @@ minecraft {
 }
 
 dependencies {
-    runtimeClasspath project(':case1')
+    runtimeOnly project(':case1')
+    runtimeOnly project(':case2')
 
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
