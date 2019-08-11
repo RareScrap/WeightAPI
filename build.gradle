@@ -29,7 +29,7 @@ minecraft {
     runDir = "eclipse"
 
     File f = project(":case1").projectDir;
-    at(file("$f/src/main/resources/META-INF/weightapi_example1_at.cfg")) // TODO: Добавлять циклом
+    at(file("$f/src/main/resources/META-INF/weightapi_example1_at.cfg")) // TODO: Добавлять трансформеры из сабпроджектов циклом?
 }
 
 dependencies {
