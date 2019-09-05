@@ -1,8 +1,2 @@
-apply from: "$rootDir/build.gradle"
-
 version = "0.3.0"
 archivesBaseName = "weightapi-case1"
-
-dependencies {
-    compile rootProject
-}
