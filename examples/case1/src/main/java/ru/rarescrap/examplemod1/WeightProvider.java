@@ -93,7 +93,7 @@ public class WeightProvider implements IWeightProvider {
         public IMessage onMessage(WeightProvider.SyncMessage message, MessageContext ctx) {
 //            if (WeightRegistry.getWeightProvider() == null ||
 //                    WeightRegistry.getWeightProvider() != ConfigurableWeight.configurableWeightProvider) // Эта проверку нужна, когда игрок в сингле
-            //WeightRegistry.registerWeightProvider("WeightProvider", new WeightProvider()); // Нет нужды переслать данные на клиент, так что мы просто зарегаем аналогичную систему веса, которая регистрировалась при старте игры на клиенте
+            WeightRegistry.registerWeightProvider("WeightProvider", new WeightProvider()); // Нет нужды переслать данные на клиент, так что мы просто зарегаем аналогичную систему веса, которая регистрировалась при старте игры на клиенте
             WeightRegistry.activateWeightProvider("WeightProvider", Minecraft.getMinecraft().theWorld);
 
             return null;

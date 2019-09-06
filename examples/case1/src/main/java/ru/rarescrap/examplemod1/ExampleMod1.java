@@ -1,21 +1,14 @@
 package ru.rarescrap.examplemod1;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.EnumHelper;
 import ru.rarescrap.weightapi.WeightAPI;
 import ru.rarescrap.weightapi.WeightRegistry;
-
-import java.io.File;
 
 /**
  * Кейс №1 - независимая система веса, никак не затрагивающая другие системы.
@@ -30,14 +23,12 @@ public class ExampleMod1
 
     public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(MODID.toLowerCase());
 
-    @SideOnly(Side.CLIENT)
-    public static RenderGameOverlayEvent.ElementType WEIGHT = EnumHelper.addEnum(RenderGameOverlayEvent.ElementType.class, "WEIGHT");
+    @SidedProxy(serverSide = "ru.rarescrap.examplemod1.CommonProxy", clientSide = "ru.rarescrap.examplemod1.ClientProxy")
+    public static CommonProxy proxy;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        EventHandler eventHandler1 = new EventHandler();
-        MinecraftForge.EVENT_BUS.register(eventHandler1);
-        FMLCommonHandler.instance().bus().register(eventHandler1);
+        proxy.preInit(event);
         NETWORK.registerMessage(WeightProvider.MessageHandler.class,
                 WeightProvider.SyncMessage.class,0, Side.CLIENT);
     }
