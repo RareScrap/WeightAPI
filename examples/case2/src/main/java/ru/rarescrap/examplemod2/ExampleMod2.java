@@ -7,7 +7,6 @@ import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
-import ru.rarescrap.test.case2.NewConfigurableWeightProvider;
 import ru.rarescrap.weightapi.WeightAPI;
 import ru.rarescrap.weightapi.WeightRegistry;
 

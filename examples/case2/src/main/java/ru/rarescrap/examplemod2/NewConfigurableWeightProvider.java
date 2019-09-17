@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.rarescrap.simpleweightsystem.ConfigurableWeight.NETWORK;
+import static ru.rarescrap.examplemod2.ExampleMod2.NETWORK;
 
 public class NewConfigurableWeightProvider extends ConfigurableWeightProvider {
     public NewConfigurableWeightProvider(Map<Item, Double> weightStorage, double defaultWeight) {
