@@ -118,10 +118,7 @@ public class NewConfigurableWeightProvider extends ConfigurableWeightProvider {
         @SideOnly(Side.CLIENT)
         @Override
         public IMessage onMessage(NewSyncMessage message, MessageContext ctx) {
-//            if (WeightRegistry.getWeightProvider() == null ||
-//                    WeightRegistry.getWeightProvider() != ConfigurableWeight.configurableWeightProvider) // Эта проверку нужна, когда игрок в сингле
-            WeightRegistry.registerWeightProvider("NewConfigurableWeightProvider", message.weightProvider);
-            WeightRegistry.activateWeightProvider("NewConfigurableWeightProvider", Minecraft.getMinecraft().theWorld);
+            WeightRegistry.applyToClient(message.weightProvider);
             return null;
         }
     }

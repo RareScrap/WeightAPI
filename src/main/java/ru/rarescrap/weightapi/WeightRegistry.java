@@ -1,5 +1,8 @@
 package ru.rarescrap.weightapi;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.integrated.IntegratedServer;
@@ -22,9 +25,11 @@ public class WeightRegistry {
     private static HashMap<String, IWeightProvider> providers = new HashMap<String, IWeightProvider>();
 
     /**
-     * Устанавливает действующий {@link IWeightProvider}, к которому будут обращаться все инвентари игры
+     * Устанавливает на сервере действующий {@link IWeightProvider}, к которому будут обращаться все инвентари игры
      * (в том числе и из других модов) для вычисления веса, свободного места и т.д. Провайдер дожен быть
-     * предварительно зарегистрировать при помощи {@link #registerWeightProvider(String, IWeightProvider)}
+     * предварительно зарегистрировать при помощи {@link #registerWeightProvider(String, IWeightProvider)}<br>
+     * <br>
+     * Для применения провайдера на клиенте используйте {@link #applyToClient(IWeightProvider)}.
      * <br>
      * <strong>ВНИМАНИЕ!</strong> Главным способ задания текущего {@link IWeightProvider}'а является
      * команда {@link ru.rarescrap.weightapi.command.SetWeightProvider}. При перезапуске сервера предыдущий
@@ -34,17 +39,33 @@ public class WeightRegistry {
      * @param providerName Название провайдера, который требуется применить
      * @param world Мир, в котором произошла активация системы веса. Несмотря на это
      * @return True, если провайдер был обновен. Иначе - false.
+     * @see #applyToClient(IWeightProvider)
      */
     @Deprecated
     public static boolean activateWeightProvider(String providerName, World world) {
         IWeightProvider newProvider = providers.get(providerName);
-        if (newProvider == null) return false;
+        if (world.isRemote || newProvider == null) return false;
 
         MinecraftForge.EVENT_BUS.post(new WeightProviderChangedEvent.Pre(activeWeightProvider, newProvider, world));
         activeWeightProvider = newProvider;
-        if (!world.isRemote && shouldSyncProvider()) syncWithAllPlayers();
+        if (shouldSyncProvider()) syncWithAllPlayers();
         MinecraftForge.EVENT_BUS.post(new WeightProviderChangedEvent.Post(activeWeightProvider, newProvider, world));
         return true;
+    }
+
+    /**
+     * Устанавливает на клиенте действующий {@link IWeightProvider}. В отличии от серверного аналога
+     * ({@link #activateWeightProvider(String, World)}) не требует предварительной регистрации провайдера
+     * @param weightProvider Провайдер, который требуется применить на клиенте
+     * @see #activateWeightProvider(String, World)
+     */
+    @SideOnly(Side.CLIENT)
+    public static void applyToClient(IWeightProvider weightProvider) {
+        MinecraftForge.EVENT_BUS.post(new WeightProviderChangedEvent.Pre(activeWeightProvider,
+                weightProvider, Minecraft.getMinecraft().theWorld));
+        activeWeightProvider = weightProvider;
+        MinecraftForge.EVENT_BUS.post(new WeightProviderChangedEvent.Post(activeWeightProvider,
+                weightProvider, Minecraft.getMinecraft().theWorld));
     }
 
     static boolean shouldSyncProvider() {
