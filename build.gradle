@@ -90,7 +90,7 @@ subprojects { // TODO: Forge дублируется в зависимостях 
     }
 }
 
-version = "0.3.0"
+version = "0.4.0"
 group= "ru.rarescrap.weightapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "weightapi"
 def publicationVersion = version+'_1.7.10'

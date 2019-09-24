@@ -17,7 +17,7 @@ import java.io.File;
  * Представленная в этом кейсе система будет использовать тот рендер и поведение при перегрузе, которое указано для
  * ConfigurableWeightProvider.
  */
-@Mod(modid = ExampleMod2.MODID, version = ExampleMod2.VERSION, dependencies = "required-after:configurableweight")
+@Mod(modid = ExampleMod2.MODID, version = ExampleMod2.VERSION, dependencies = "required-after:configurableweight@[0.4.0]")
 public class ExampleMod2 {
     public static final String MODID = WeightAPI.MODID + "_example2";
     public static final String VERSION = WeightAPI.VERSION;

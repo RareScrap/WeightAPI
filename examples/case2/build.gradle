@@ -1,4 +1,4 @@
-version = "0.3.0"
+version = "0.4.0"
 archivesBaseName = "weightapi-case2"
 
 repositories {
@@ -8,5 +8,5 @@ repositories {
 }
 
 dependencies {
-    compile 'ru.rarescrap.configurableweight:configurableweight:0.2.0a_1.7.10:dev'
+    compile 'ru.rarescrap.configurableweight:configurableweight:0.4.0_1.7.10:dev'
 }

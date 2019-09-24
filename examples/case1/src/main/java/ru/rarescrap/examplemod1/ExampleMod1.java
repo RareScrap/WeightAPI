@@ -15,7 +15,7 @@ import ru.rarescrap.weightapi.WeightRegistry;
  * Полностью автономная система со своим эффектом перегруза и своим собственным
  * независимым рендеров веса. Может быть расширена классами наследниками.
  */
-@Mod(modid = ExampleMod1.MODID, version = ExampleMod1.VERSION, dependencies = "required-after:weightapi@0.3.0")
+@Mod(modid = ExampleMod1.MODID, version = ExampleMod1.VERSION, dependencies = "required-after:weightapi@[0.4.0]")
 public class ExampleMod1
 {
     public static final String MODID = WeightAPI.MODID + "_example1";
