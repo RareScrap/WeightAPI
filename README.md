@@ -1,3 +1,4 @@
+[![Bintray Download](https://api.bintray.com/packages/rarescrap/minecraft/weight-api/images/download.svg?version=0.4.0_1.7.10) ](https://bintray.com/rarescrap/minecraft/weight-api/0.4.0_1.7.10/link)
 # Weight <img src="github_media/logo.png" alt="logo"/>
 API, позволяющий добавлять в Minecraft вес предметов, перегруз и т.п. без конфликтов с дргими модами, делающих тоже самое.
 
