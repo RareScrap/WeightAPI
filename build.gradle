@@ -23,9 +23,7 @@ buildscript { // Непонятно почему я не могу раздели
 
 allprojects {
     repositories { // Вообще, этот реп нужен только в case2, но тогда рутпроект не может найти местонахождение configurabeweight
-        maven {
-            url = "https://dl.bintray.com/rarescrap/minecraft"
-        }
+        maven { url = "https://dl.bintray.com/rarescrap/minecraft" }
     }
 
     apply from: "$rootDir/gradle/mcforge.gradle"
@@ -51,20 +49,5 @@ publishing {
     }
 }
 
-// Публикация либы в bintray/jcenter
-apply plugin: 'com.jfrog.bintray'
-bintray {
-    user = 'rarescrap'
-    key = System.getenv('BINTRAY_KEY')
-    publications = ['BintrayPublication']
-    pkg {
-        repo = 'minecraft'
-        name = 'weight-api'
-        licenses = ['GPL-3.0']
-        vcsUrl = 'https://github.com/RareScrap/WeightAPI.git'
-        version {
-            name = publicationVersion
-            released  = new Date()
-        }
-    }
-}
+apply plugin: 'DepATs'
+minecraft { at(DepATs.getDepATs()) } // Включаем трансформеры из зависимостей
