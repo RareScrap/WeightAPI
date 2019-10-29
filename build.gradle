@@ -32,22 +32,22 @@ allprojects {
 
 
 
-// Подготавливает maven-публикацию, которая будет использоваться в bintray
-// Именно тут определяются артефакты для публикации
-apply plugin: 'maven-publish'
-publishing {
-    publications {
-        BintrayPublication(MavenPublication) {
-            //from components.java // Артефакты по умолчанию. Отлючаем их, т.к. нам нужно артефакт main-модуля заменить на артефакт от api-модуля
-            groupId group
-            artifactId archivesBaseName
-            version publicationVersion
-            artifact deobfJar
-            artifact sourcesJar
-            artifact javadocJar
-        }
+// Предотвращаем зависимость сабпроджектов от самих себя
+subprojects { // TODO: Forge дублируется в зависимостях с битым путем
+    dependencies {
+        compile rootProject
+    }
+    configurations { // TODO: Должен быть способ лучше эксклюдить кейсы в самих же кейсах. Что-то вроде "transitive = false"
+        runtimeOnly.exclude module: 'case1'
+        runtimeOnly.exclude module: 'case2'
     }
 }
 
 apply plugin: 'DepATs'
 minecraft { at(DepATs.getDepATs()) } // Включаем трансформеры из зависимостей
+
+dependencies {
+    // При запуске игры из рутпроекта сабпроджкты подлючатся как моды
+    runtimeOnly project(':case1')
+    runtimeOnly project(':case2')
+}
