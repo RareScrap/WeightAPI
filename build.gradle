@@ -28,9 +28,8 @@ allprojects {
 
     apply from: "$rootDir/gradle/mcforge.gradle"
 
-
-
-
+    group= "ru.rarescrap.weightapi"
+}
 
 // Предотвращаем зависимость сабпроджектов от самих себя
 subprojects { // TODO: Forge дублируется в зависимостях с битым путем
@@ -42,6 +41,13 @@ subprojects { // TODO: Forge дублируется в зависимостях 
         runtimeOnly.exclude module: 'case2'
     }
 }
+
+apply from: "$rootDir/gradle/bintray.gradle"
+
+version = "0.4.0"
+//group= "ru.rarescrap.weightapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "weightapi"
+def publicationVersion = version+'_1.7.10'
 
 apply plugin: 'DepATs'
 minecraft { at(DepATs.getDepATs()) } // Включаем трансформеры из зависимостей
