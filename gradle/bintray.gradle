@@ -29,7 +29,7 @@ publishing {
 apply plugin: 'com.jfrog.bintray'
 bintray {
     user = 'rarescrap'
-    key = "866f8da09ed3eaaaa3d982830bee4304173fb8d5" //System.getenv('BINTRAY_KEY')
+    key = System.getenv('BINTRAY_KEY')
     publications = ["$project.name"]
 //    dryRun = true // Для тестов
     pkg {
