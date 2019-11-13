@@ -1,9 +1,3 @@
-/*
-Это просто блядский пиздец, товарищи. Сколько я не ебался, не получилось у меня
-написать скрпит для юзания в allProjects. Вам кажется что этот код можно сделать лучше?
-Ну так вперед! Но говно тут не просто так распихано...
- */
-
 // Подготавливает maven-публикацию, которая будет использоваться в bintray
 // Именно тут определяются артефакты для публикации
 apply plugin: 'maven-publish'
@@ -11,10 +5,9 @@ publishing {
     publications {
         "$project.name"(MavenPublication) {
             afterEvaluate { // Создаем публикацию только после настройки проекта
-                //from components.java // Артефакты по умолчанию. Отлючаем их, т.к. нам нужно артефакт main-модуля заменить на артефакт от api-модуля
+                //from components.java // Артефакты по умолчанию. Отлючаем их, т.к. нам не нужен обфусцированный jar'ник
                 groupId group
                 artifactId archivesBaseName
-//                version "0.4.0_1.7.10" // TODO: Это для дебага, ибо project.version может не подобраться в allProjects
                 version "${project.version}_1.7.10"
                 artifact deobfJar
                 artifact sourcesJar
@@ -37,11 +30,14 @@ bintray {
         licenses = ['GPL-3.0']
         vcsUrl = 'https://github.com/RareScrap/WeightAPI.git'
         version {
-//            afterEvaluate { // TODO: Точно такое же говно как и выше, но теперь для версии публикации на bintray. Не знаю поему, но case2 вообще не втупляет в эту запись
-                    name = "0.4.0_1.7.10"
-//                name = "${project.version}_1.7.10" // TODO: Как раз из-за case2. Он просто ставит 0.4.0
+            // TODO: По непонятным причинам я не могу таким способом подцеплять версию сабпроджектов.
+            // Не знаю поему, но case2 вообще не втупляет в эту запись.
+            // Он просто ставит 0.4.0
+            // afterEvaluate {
+                name = "0.4.0_1.7.10" // Едиственный способэто завести - писать версию вручную
+                // name = "${project.version}_1.7.10" // TODO: А это то, как должно быть, по идее
                 released = new Date()
-//            }
+            //}
         }
     }
 }
