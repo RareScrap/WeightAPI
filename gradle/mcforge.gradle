@@ -47,3 +47,12 @@ idea { module { inheritOutputDirs = true } }
 javadoc { options.encoding = 'UTF-8' }
 // Устраняет ошибки и предупреждения компиляции из-за русских комментов
 tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+
+task safeClean(type: Delete, group: "build", description: "The same as the stadart \"Clean\" task, but doesn't delete the Minecraft binary and other specified files") {
+    ext.exclude = Arrays.asList("dirtyArtifacts");
+    doLast {
+        file('build').eachFile() { File file ->
+            if (!exclude.contains(file.name)) delete files(file)
+        }
+    }
+}

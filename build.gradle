@@ -51,6 +51,7 @@ def publicationVersion = version+'_1.7.10'
 
 apply plugin: 'DepATs'
 minecraft { at(DepATs.getDepATs()) } // Включаем трансформеры из зависимостей
+safeClean { exclude += DepATs.getDepATs().name } // Добавляем файл трансформеров-зависимостей в исключение при очистке
 
 dependencies {
     // При запуске игры из рутпроекта сабпроджкты подлючатся как моды
