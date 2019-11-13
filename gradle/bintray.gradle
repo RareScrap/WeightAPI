@@ -8,9 +8,9 @@
 // Именно тут определяются артефакты для публикации
 apply plugin: 'maven-publish'
 publishing {
-//        afterEvaluate { // TODO: Этим говном я пытался подбирать имя проекта в allProjects после того как оно назначится
     publications {
         "$project.name"(MavenPublication) {
+            afterEvaluate { // Создаем публикацию только после настройки проекта
                 //from components.java // Артефакты по умолчанию. Отлючаем их, т.к. нам нужно артефакт main-модуля заменить на артефакт от api-модуля
                 groupId group
                 artifactId archivesBaseName
@@ -19,10 +19,9 @@ publishing {
                 artifact deobfJar
                 artifact sourcesJar
                 artifact javadocJar
+            }
         }
     }
-//        }
-
 }
 
 // Публикация либы в bintray/jcenter
