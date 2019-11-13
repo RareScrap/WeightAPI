@@ -5,7 +5,7 @@
   "description": "API for adding weight system for items. This api allows modders to create their own weight tracking systems, determine the maximum tolerable weight, and respond to weight changes in any inventory.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "https://github.com/RareScrap/WeightAPI",
   "updateUrl": "",
   "authorList": ["RareScrap"],
   "credits": "Special thanks the Forge and FML guys.",

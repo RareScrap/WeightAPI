@@ -1,0 +1,16 @@
+[
+{
+  "modid": "weightapi_example1",
+  "name": "WeightAPI example mod #1",
+  "description": "Пример системы веса, реализующий WeightAPI. Вес каждого предмета равен 1, над голодом отображается шкала переносимого веса, а при перегрузе игрок теряет возможность двигаться.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/RareScrap/WeightAPI/tree/master/examples/case1",
+  "updateUrl": "",
+  "authorList": ["RareScrap"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["weightapi"]
+}
+]

@@ -1,0 +1,3 @@
+include 'case1', 'case2'
+project(":case1").projectDir = file("examples/case1")
+project(":case2").projectDir = file("examples/case2")

@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "weightapi_example2",
+    "name": "WeightAPI example mod #2",
+    "description": "Система веса, расширяющая уже существующую систему ConfigurableWeightProvider. Представленная в этом примере система будет использовать тот рендер и поведение при перегрузе, которое указано для ConfigurableWeightProvider.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://github.com/RareScrap/WeightAPI/tree/master/examples/case2",
+    "updateUrl": "",
+    "authorList": ["RareScrap"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": ["configurableweight"]
+  }
+]

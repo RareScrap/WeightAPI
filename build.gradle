@@ -1,4 +1,4 @@
-buildscript {
+buildscript { // Непонятно почему я не могу разделить этот блок на зависимости для всех проектов и на зависимости для рутпроект. Ругается на невозможность резолва
     repositories {
         jcenter()
         mavenCentral()
@@ -10,119 +10,50 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+        maven {
+            url = "https://dl.bintray.com/rarescrap/minecraft"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.1'  // 1.8.4 не юзается, т.к. он не работает нифига
+        classpath 'ru.rarescrap:depATs:1.0.0' // Для поиска трансформеров в зависимостях
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.1' // 1.8.4 не юзается, т.к. он не работает нифига
     }
 }
 
-apply plugin: 'forge'
+allprojects {
+    repositories { // Вообще, этот реп нужен только в case2, но тогда рутпроект не может найти местонахождение configurabeweight
+        maven { url = "https://dl.bintray.com/rarescrap/minecraft" }
+    }
 
-version = "0.3.0"
-group= "ru.rarescrap.weightapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+    apply from: "$rootDir/gradle/mcforge.gradle"
+
+    group= "ru.rarescrap.weightapi"
+    apply from: "$rootDir/gradle/bintray.gradle"
+}
+
+// Предотвращаем зависимость сабпроджектов от самих себя
+subprojects { // TODO: Forge дублируется в зависимостях с битым путем
+    dependencies {
+        compile rootProject
+    }
+    configurations { // TODO: Должен быть способ лучше эксклюдить кейсы в самих же кейсах. Что-то вроде "transitive = false"
+        runtimeOnly.exclude module: 'case1'
+        runtimeOnly.exclude module: 'case2'
+    }
+}
+
+version = "0.4.0"
+//group= "ru.rarescrap.weightapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "weightapi"
 def publicationVersion = version+'_1.7.10'
 
-minecraft {
-    version = "1.7.10-10.13.4.1614-1.7.10"
-    runDir = "eclipse"
-}
+apply plugin: 'DepATs'
+minecraft { at(DepATs.getDepATs()) } // Включаем трансформеры из зависимостей
+safeClean { exclude += DepATs.getDepATs().name } // Добавляем файл трансформеров-зависимостей в исключение при очистке
 
 dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+    // При запуске игры из рутпроекта сабпроджкты подлючатся как моды
+    runtimeOnly project(':case1')
+    runtimeOnly project(':case2')
 }
-
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-}
-
-// Собираем бинарник мода без обфускации. Рабочий вариант, в отличие от оф. доков из ForgeGradle
-task deobfJar(type: Jar) {
-    classifier "dev"
-    from sourceSets.main.output
-}
-
-// Формирует jar'ник с доками
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-// Формирует jar'ник с исходниками
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-// Подготавливает maven-публикацию, которая будет использоваться в bintray
-// Именно тут определяются артефакты для публикации
-apply plugin: 'maven-publish'
-publishing {
-    publications {
-        BintrayPublication(MavenPublication) {
-            //from components.java // Артефакты по умолчанию. Отлючаем их, т.к. нам нужно артефакт main-модуля заменить на артефакт от api-модуля
-            groupId group
-            artifactId archivesBaseName
-            version publicationVersion
-            artifact deobfJar
-            artifact sourcesJar
-            artifact javadocJar
-        }
-    }
-}
-
-// Публикация либы в bintray/jcenter
-apply plugin: 'com.jfrog.bintray'
-bintray {
-    user = 'rarescrap'
-    key = System.getenv('BINTRAY_KEY')
-    publications = ['BintrayPublication']
-    pkg {
-        repo = 'minecraft'
-        name = 'weight-api'
-        licenses = ['GPL-3.0']
-        vcsUrl = 'https://github.com/RareScrap/WeightAPI.git'
-        version {
-            name = publicationVersion
-            released  = new Date()
-        }
-    }
-}
-
-// Чтоб idea смогла запаковать ресурсы в джарник
-idea { module { inheritOutputDirs = true } }
-
-// Поддержка руских букв в доках
-javadoc { options.encoding = 'UTF-8' }
-// Устраняет ошибки и предупреждения компиляции из-за русских комментов
-compileJava.options.encoding = 'UTF-8'
-tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
