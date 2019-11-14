@@ -8,7 +8,7 @@ publishing {
                 //from components.java // Артефакты по умолчанию. Отлючаем их, т.к. нам не нужен обфусцированный jar'ник
                 groupId group
                 artifactId archivesBaseName
-                version "${project.version}_1.7.10"
+                version version
                 artifact deobfJar
                 artifact sourcesJar
                 artifact javadocJar

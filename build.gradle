@@ -22,14 +22,14 @@ buildscript { // Непонятно почему я не могу раздели
 }
 
 allprojects {
+    // TODO: Найти способ подцеплять зависимости из сабпроджектов и при этом не дублировать их
     repositories { // Вообще, этот реп нужен только в case2, но тогда рутпроект не может найти местонахождение configurabeweight
         maven { url = "https://dl.bintray.com/rarescrap/minecraft" }
     }
-
     apply from: "$rootDir/gradle/mcforge.gradle"
-
-    group= "ru.rarescrap.weightapi"
     apply from: "$rootDir/gradle/bintray.gradle"
+    group= "ru.rarescrap.weightapi"
+    version = "0.4.0_1.7.10"
 }
 
 // Предотвращаем зависимость сабпроджектов от самих себя
@@ -43,11 +43,7 @@ subprojects { // TODO: Forge дублируется в зависимостях 
     }
 }
 
-version = "0.4.0"
-//group= "ru.rarescrap.weightapi" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "weightapi"
-def publicationVersion = version+'_1.7.10'
-
 apply plugin: 'DepATs'
 minecraft { at(DepATs.getDepATs()) } // Включаем трансформеры из зависимостей
 safeClean { exclude += DepATs.getDepATs().name } // Добавляем файл трансформеров-зависимостей в исключение при очистке

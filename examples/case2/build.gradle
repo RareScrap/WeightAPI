@@ -1,4 +1,3 @@
-version = "0.4.0"
 archivesBaseName = "weightapi-case2"
 
 repositories {
