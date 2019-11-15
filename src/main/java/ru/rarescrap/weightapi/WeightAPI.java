@@ -10,6 +10,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -62,5 +64,25 @@ public class WeightAPI {
     @SubscribeEvent
     public void onWorldSave(WorldEvent.Save event) { //TODO: FMLServerStoppedEvent?
         if (!event.world.isRemote) WorldData.get(event.world).markDirty();
+    }
+
+    // Присоединяем игрокам трекер инвентаря
+    @SubscribeEvent
+    public void onEntityConstructing(EntityEvent.EntityConstructing event) {
+        if (event.entity instanceof EntityPlayerMP && PlayerWeightTracker.get((EntityPlayerMP) event.entity) == null)
+            PlayerWeightTracker.register((EntityPlayerMP) event.entity);
+    }
+
+    // И присоединяем его к открытым контейнерам
+    @SubscribeEvent
+    public void onPlayerOpenContainer(PlayerOpenContainerEvent e) {
+        PlayerWeightTracker tracker = PlayerWeightTracker.get((EntityPlayerMP) e.entityPlayer);
+        /* Довольно узкое место. Дело в том, что PlayerOpenContainerEvent не совсем соотстветвует своему
+         * описанию. Это скорее "CanInteractWithContainerEvent". Это из-за того, что этот евент по сути
+         * выбрасывается каждый тик. А открываться контейнер каждый тик не может по логике.
+         * Однако и этот "ущербный" эвент можно использовать в нужном ключе (в данном случае, для присоединения
+         * слушателя изменения инвентаря (ICrafting). Только нужно позаботиться, чтобы он не добавлялся дважды. */
+        if (!e.entityPlayer.openContainer.crafters.contains(tracker))
+            tracker.attachListener(); // TODO: а если canInteractWith == false?
     }
 }
