@@ -3,6 +3,7 @@ package ru.rarescrap.weightapi.command;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.util.ChatComponentTranslation;
 import ru.rarescrap.weightapi.WeightRegistry;
 
 public class GetActiveWeightProvider extends CommandBase {
@@ -21,10 +22,10 @@ public class GetActiveWeightProvider extends CommandBase {
         if (args.length != 0) throw new WrongUsageException(this.getCommandUsage(commandSender));
 
         if (WeightRegistry.getActiveWeightProvider() == null) {
-            func_152373_a(commandSender, this, "commands.weightprovider.failure.getActive");
+            commandSender.addChatMessage(new ChatComponentTranslation("commands.weightprovider.failure.getActive"));
         } else {
-            // TODO: или commandSender.addChatMessage()?
-            func_152373_a(commandSender, this, "commands.weightprovider.success.getActive", WeightRegistry.getActiveProviderName());
+            commandSender.addChatMessage(new ChatComponentTranslation(
+                    "commands.weightprovider.success.getActive",WeightRegistry.getActiveProviderName()));
         }
     }
 }

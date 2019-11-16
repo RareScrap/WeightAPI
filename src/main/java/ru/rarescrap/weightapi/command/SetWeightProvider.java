@@ -41,7 +41,7 @@ public class SetWeightProvider extends CommandBase {
             FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager()
                     .sendChatMsg(new ChatComponentTranslation("commands.weightprovider.success.set"));
         } else {
-            // TODO: или commandSender.addChatMessage()?
+            // В отличии от commandSender.addChatMessage() служит для уведомления других администраторов
             func_152373_a(commandSender, this, "commands.weightprovider.success.set");
         }
     }
