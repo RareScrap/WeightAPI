@@ -103,12 +103,6 @@ public class WeightRegistry {
         processProviderChange(null, world); // TODO: ворлд нужен просто для евенов. Изменить бы это когда буду делать систему веса для каждого мира.
     }
 
-    // не для использования за пределами апи
-    @SideOnly(Side.CLIENT)
-    static void clearProvider() {
-        activeWeightProvider = null;
-    }
-
     /**
      * @return Имена доступных систем веса
      */

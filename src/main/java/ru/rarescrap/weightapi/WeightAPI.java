@@ -49,13 +49,6 @@ public class WeightAPI {
         event.registerServerCommand(new ClearWeightProvider());
     }
 
-    @Mod.EventHandler
-    public void onServerStopped(FMLServerStoppedEvent event) {
-        // т.к. при завершении мира в сингле провайдер все еще
-        // сохраняется и вызовет краш при следующем заходе в игру
-        WeightRegistry.clearProvider();
-    }
-
     // Синхронизирует систему веса на сервере с клиентом при подключении игрока
     @SubscribeEvent(priority = EventPriority.LOW) // TODO: ХЗ качем приоритет. Но жопой чую что он должен работать после других эвентов
     public void onClientConnect(PlayerEvent.PlayerLoggedInEvent event) {
