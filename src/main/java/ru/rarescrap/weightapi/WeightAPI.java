@@ -8,6 +8,9 @@ import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -15,6 +18,7 @@ import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.rarescrap.weightapi.command.ClearWeightProvider;
 import ru.rarescrap.weightapi.command.GetActiveWeightProvider;
 import ru.rarescrap.weightapi.command.GetWeightProviders;
 import ru.rarescrap.weightapi.command.SetWeightProvider;
@@ -26,10 +30,15 @@ public class WeightAPI {
 
     static final Logger LOGGER = LogManager.getLogger("WeightAPI");
 
+    static final SimpleNetworkWrapper NETWORK_WRAPPER =
+            NetworkRegistry.INSTANCE.newSimpleChannel(MODID.toLowerCase());
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
         FMLCommonHandler.instance().bus().register(this);
+        NETWORK_WRAPPER.registerMessage(ClearWeightProvider.MessageHandler.class,
+                ClearWeightProvider.Message.class, 0, Side.CLIENT);
     }
 
     @Mod.EventHandler
@@ -37,7 +46,7 @@ public class WeightAPI {
         event.registerServerCommand(new GetActiveWeightProvider());
         event.registerServerCommand(new GetWeightProviders());
         event.registerServerCommand(new SetWeightProvider());
-        // TODO: Команда отключения активного провайдера
+        event.registerServerCommand(new ClearWeightProvider());
     }
 
     @Mod.EventHandler
