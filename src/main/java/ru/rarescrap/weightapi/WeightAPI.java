@@ -4,15 +4,20 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.rarescrap.weightapi.command.ClearWeightProvider;
 import ru.rarescrap.weightapi.command.GetActiveWeightProvider;
 import ru.rarescrap.weightapi.command.GetWeightProviders;
 import ru.rarescrap.weightapi.command.SetWeightProvider;
@@ -20,14 +25,19 @@ import ru.rarescrap.weightapi.command.SetWeightProvider;
 @Mod(modid = WeightAPI.MODID, version = WeightAPI.VERSION)
 public class WeightAPI {
     public static final String MODID = "weightapi";
-    public static final String VERSION = "0.4.0";
+    public static final String VERSION = "0.5.0";
 
     static final Logger LOGGER = LogManager.getLogger("WeightAPI");
+
+    static final SimpleNetworkWrapper NETWORK_WRAPPER =
+            NetworkRegistry.INSTANCE.newSimpleChannel(MODID.toLowerCase());
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
         FMLCommonHandler.instance().bus().register(this);
+        NETWORK_WRAPPER.registerMessage(ClearWeightProvider.MessageHandler.class,
+                ClearWeightProvider.Message.class, 0, Side.CLIENT);
     }
 
     @Mod.EventHandler
@@ -35,14 +45,7 @@ public class WeightAPI {
         event.registerServerCommand(new GetActiveWeightProvider());
         event.registerServerCommand(new GetWeightProviders());
         event.registerServerCommand(new SetWeightProvider());
-        // TODO: Команда отключения активного провайдера
-    }
-
-    @Mod.EventHandler
-    public void onServerStopped(FMLServerStoppedEvent event) {
-        // т.к. при завершении мира в сингле провайдер все еще
-        // сохраняется и вызовет краш при следующем заходе в игру
-        WeightRegistry.clearProvider();
+        event.registerServerCommand(new ClearWeightProvider());
     }
 
     // Синхронизирует систему веса на сервере с клиентом при подключении игрока
@@ -62,5 +65,25 @@ public class WeightAPI {
     @SubscribeEvent
     public void onWorldSave(WorldEvent.Save event) { //TODO: FMLServerStoppedEvent?
         if (!event.world.isRemote) WorldData.get(event.world).markDirty();
+    }
+
+    // Присоединяем игрокам трекер инвентаря
+    @SubscribeEvent
+    public void onEntityConstructing(EntityEvent.EntityConstructing event) {
+        if (event.entity instanceof EntityPlayerMP && PlayerWeightTracker.get((EntityPlayerMP) event.entity) == null)
+            PlayerWeightTracker.register((EntityPlayerMP) event.entity);
+    }
+
+    // И присоединяем его к открытым контейнерам
+    @SubscribeEvent
+    public void onPlayerOpenContainer(PlayerOpenContainerEvent e) {
+        PlayerWeightTracker tracker = PlayerWeightTracker.get((EntityPlayerMP) e.entityPlayer);
+        /* Довольно узкое место. Дело в том, что PlayerOpenContainerEvent не совсем соотстветвует своему
+         * описанию. Это скорее "CanInteractWithContainerEvent". Это из-за того, что этот евент по сути
+         * выбрасывается каждый тик. А открываться контейнер каждый тик не может по логике.
+         * Однако и этот "ущербный" эвент можно использовать в нужном ключе (в данном случае, для присоединения
+         * слушателя изменения инвентаря (ICrafting). Только нужно позаботиться, чтобы он не добавлялся дважды. */
+        if (!e.entityPlayer.openContainer.crafters.contains(tracker))
+            tracker.attachListener(); // TODO: а если canInteractWith == false?
     }
 }

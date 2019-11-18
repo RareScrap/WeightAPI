@@ -4,3 +4,4 @@ commands.weightprovider.failure.set=Система веса "%s" не найде
 commands.weightprovider.success.set=Система веса была обновлена
 commands.weightprovider.success.getAll=Доступные системы веса: %s
 commands.weightprovider.success.getActive=Активная система веса: %s
+commands.weightprovider.success.clear=Система веса была сброшена

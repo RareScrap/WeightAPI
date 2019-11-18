@@ -9,6 +9,7 @@ import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import ru.rarescrap.weightapi.command.ClearWeightProvider;
 import ru.rarescrap.weightapi.event.WeightProviderChangedEvent;
 
 import java.util.HashMap;
@@ -46,10 +47,7 @@ public class WeightRegistry {
         IWeightProvider newProvider = providers.get(providerName);
         if (world.isRemote || newProvider == null) return false;
 
-        MinecraftForge.EVENT_BUS.post(new WeightProviderChangedEvent.Pre(activeWeightProvider, newProvider, world));
-        activeWeightProvider = newProvider;
-        if (shouldSyncProvider()) syncWithAllPlayers();
-        MinecraftForge.EVENT_BUS.post(new WeightProviderChangedEvent.Post(activeWeightProvider, newProvider, world));
+        processProviderChange(newProvider, world);
         return true;
     }
 
@@ -61,11 +59,16 @@ public class WeightRegistry {
      */
     @SideOnly(Side.CLIENT)
     public static void applyToClient(IWeightProvider weightProvider) {
-        MinecraftForge.EVENT_BUS.post(new WeightProviderChangedEvent.Pre(activeWeightProvider,
-                weightProvider, Minecraft.getMinecraft().theWorld));
-        activeWeightProvider = weightProvider;
-        MinecraftForge.EVENT_BUS.post(new WeightProviderChangedEvent.Post(activeWeightProvider,
-                weightProvider, Minecraft.getMinecraft().theWorld));
+        processProviderChange(weightProvider, Minecraft.getMinecraft().theWorld);
+    }
+
+    private static void processProviderChange(IWeightProvider newProvider, World world) {
+        // Флаг, предотвращающий повторную (а следовательно и зацикленную) синхронизацию отключенного веса
+        boolean flag = activeWeightProvider == null && newProvider == null;
+        MinecraftForge.EVENT_BUS.post(new WeightProviderChangedEvent.Pre(activeWeightProvider, newProvider, world));
+        activeWeightProvider = newProvider; // TODO: Проверка на повторное применение активного провайдера
+        if (!flag && !world.isRemote && shouldSyncProvider()) syncWithAllPlayers();
+        MinecraftForge.EVENT_BUS.post(new WeightProviderChangedEvent.Post(activeWeightProvider, newProvider, world));
     }
 
     static boolean shouldSyncProvider() {
@@ -73,6 +76,11 @@ public class WeightRegistry {
     }
 
     private static void syncWithAllPlayers() {
+        if (activeWeightProvider == null) { // Уведомляем клиенты, если сервер отключает систему веса
+            WeightAPI.NETWORK_WRAPPER.sendToAll(new ClearWeightProvider.Message());
+            return;
+        }
+
         for (WorldServer worldServer : MinecraftServer.getServer().worldServers) {
             for (EntityPlayerMP player : (List<EntityPlayerMP>) worldServer.playerEntities) {
                 activeWeightProvider.sync(player);
@@ -88,9 +96,11 @@ public class WeightRegistry {
         // TODO: евент при удалении системы веса
     }
 
-    // не для использования за пределами апи
-    static void clearProvider() {
-        activeWeightProvider = null;
+    /**
+     * Отключает активную систему веса
+     */
+    public static void clearProvider(World world) {
+        processProviderChange(null, world); // TODO: ворлд нужен просто для евенов. Изменить бы это когда буду делать систему веса для каждого мира.
     }
 
     /**
