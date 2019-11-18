@@ -21,7 +21,7 @@ import java.util.List;
  * Механизм работы заключается в присоединении к открытому контейнера игрока, после чего трекер
  * начинает каждый тик отслеживать изменения в слотах, опираясь на стандартный функционал конейнера.
  * Работает только на сервере, т.к. пока не имеет необходиости работать на клиенте.
- * {@see Container#detectAndSendChanges}
+ * @see Container#detectAndSendChanges()
  */
 public class PlayerWeightTracker implements ICrafting, IExtendedEntityProperties {
     private static final String EXTENDED_ENTITY_TAG = "weight_tracker_data";
