@@ -4,7 +4,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
@@ -26,7 +25,7 @@ import ru.rarescrap.weightapi.command.SetWeightProvider;
 @Mod(modid = WeightAPI.MODID, version = WeightAPI.VERSION)
 public class WeightAPI {
     public static final String MODID = "weightapi";
-    public static final String VERSION = "0.4.0";
+    public static final String VERSION = "0.5.0";
 
     static final Logger LOGGER = LogManager.getLogger("WeightAPI");
 
