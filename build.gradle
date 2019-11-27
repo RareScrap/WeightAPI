@@ -46,6 +46,7 @@ subprojects { // TODO: Forge дублируется в зависимостях 
 archivesBaseName = "weightapi"
 apply plugin: 'DepATs'
 minecraft { at(DepATs.getDepATs()) } // Включаем трансформеры из зависимостей
+jar { manifest { attributes 'FMLAT': 'weightapi_at.cfg' } }
 safeClean { exclude += DepATs.getDepATs().name } // Добавляем файл трансформеров-зависимостей в исключение при очистке
 
 dependencies {

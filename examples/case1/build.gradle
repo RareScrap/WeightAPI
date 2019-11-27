@@ -1,1 +1,3 @@
 archivesBaseName = "weightapi-case1"
+
+jar { manifest { attributes 'FMLAT': 'weightapi_example1_at.cfg' } }

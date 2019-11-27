@@ -9,3 +9,5 @@ repositories {
 dependencies {
     compile 'ru.rarescrap.configurableweight:configurableweight:0.5.0_1.7.10:dev'
 }
+
+jar { manifest { attributes 'FMLAT': 'weightapi_example2_at.cfg' } }
